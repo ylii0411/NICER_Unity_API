@@ -27,4 +27,14 @@ NICER is a New and Improved Consumed Endurance and Recovery metric to quantify m
 ## Reimplement NICER in other languages
 The current implementation is written in C#, reimplementations in other languages are more than welcome.
 
-If you have any other questions, please open an issue in the issue tracker or contact yi.li5@monash.edu.
+If you have any other questions, please open an issue in the issue tracker or contact yili34@acm.org.
+
+## Acknowledgement
+Please cite the following publication when you intend to use it for your research:
+
+[1] Yi Li, Benjamin Tag, Shaozhang Dai, Robert Crowther, Tim Dwyer, Pourang
+Irani, and Barrett Ens. 2024. NICER: A New and Improved Consumed En-
+durance and Recovery Metric to Quantify Muscle Fatigue of Mid-Air Inter-
+actions. ACM Trans. Graph. 43, 4 (July 2024), 14 pages. https://doi.org/10.1145/3658230
+
+[2] Hincapié-Ramos, Juan David, Xiang Guo, Paymahn Moghadasian, and Pourang Irani. 2014. Consumed endurance: a metric to quantify arm fatigue of mid-air interactions. In Proceedings of the SIGCHI Conference on Human Factors in Computing Systems, pp. 1063-1072. April 2014. https://dl.acm.org/doi/10.1145/2556288.2557130
