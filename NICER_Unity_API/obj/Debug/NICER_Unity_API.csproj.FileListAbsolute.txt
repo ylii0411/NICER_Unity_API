@@ -1,0 +1,10 @@
+C:\Users\Ellie\source\repos\NICER_Unity_API\bin\Debug\NICER_Unity_API.dll
+C:\Users\Ellie\source\repos\NICER_Unity_API\bin\Debug\NICER_Unity_API.pdb
+C:\Users\Ellie\source\repos\NICER_Unity_API\bin\Debug\UnityEngine.dll
+C:\Users\Ellie\source\repos\NICER_Unity_API\bin\Debug\UnityEngine.UI.dll
+C:\Users\Ellie\source\repos\NICER_Unity_API\bin\Debug\UnityEngine.xml
+C:\Users\Ellie\source\repos\NICER_Unity_API\obj\Debug\NICER_Unity_API.csproj.AssemblyReference.cache
+C:\Users\Ellie\source\repos\NICER_Unity_API\obj\Debug\NICER_Unity_API.csproj.CoreCompileInputs.cache
+C:\Users\Ellie\source\repos\NICER_Unity_API\obj\Debug\NICER_Unity_API.csproj.CopyComplete
+C:\Users\Ellie\source\repos\NICER_Unity_API\obj\Debug\NICER_Unity_API.dll
+C:\Users\Ellie\source\repos\NICER_Unity_API\obj\Debug\NICER_Unity_API.pdb
