@@ -14,10 +14,11 @@ NICER is a New and Improved Consumed Endurance and Recovery metric to quantify m
 * Gesture-based maximum strength estimated from dynamic arm movement.
 
 ## How To Use
-1. Download the plug-in Unity library NICER_Unity_API.dll in the working Unity Project.
+1. Download the plug-in Unity library NICER_Unity_API.dll, and demo files (RunNICER.cs and Sample_Mocap.txt) to the working Unity Project.
 2. Assign NICER_API.cs to any chosen object in the working scene.
-3. Add tracking sources of joints Hand, Wrist, Elbow, and Shoulder to the public fields of FatigueEstimation.cs.
-4. Run the scene.
+3. Add tracking sources of joints Hand, Wrist, Elbow, and Shoulder to the public fields of NICER_API.cs.
+4. Assign RunNICER.cs to any chosen object and put the previous object with the NICER_API component to the public field of NICER_API.
+5. Run the scene.
 
 ## Tracking Source of Arm Posture
 * Inverse Kinematic approach: [VRArmIK (Shoulder, Elbow)](https://github.com/dabeschte/VRArmIK?tab=readme-ov-file) + [OVRSkeleton (Wrist, Hand)](https://developer.oculus.com/reference/unity/v64/class_o_v_r_skeleton/) 
