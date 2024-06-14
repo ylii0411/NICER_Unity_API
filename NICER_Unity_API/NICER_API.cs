@@ -10,40 +10,14 @@ namespace NICER_Unity_API
 {
     public class NICER_API : MonoBehaviour
     {
-        public string Gender;
 
         private NICER_Model nicer = new NICER_Model();
 
-        public float duration;
-        public float delta;
-
-        public Transform hand;
-        public Transform wrist;
-        public Transform elbow;
-        public Transform shoulder;
-
-        public void setPosition(Vector3 hd, Vector3 wt, Vector3 el, Vector3 sh)
+        public double[] generatePrediction(Transform hand, Transform wrist, Transform elbow, Transform shoulder, string gender, float delta, float duration)
         {
-            shoulder.position = sh;
-            elbow.position = el;
-            wrist.position = wt;
-            hand.position = hd;
-        }
+            double[] fatigue_indicator;
 
-        public void setDelta(float dt)
-        {
-            delta = dt;
-        }
-
-        public void setTime(float ts)
-        {
-            duration = ts;
-        }
-
-        public double generatePrediction()
-        {
-
-            nicer.SetGenderValue(Gender);
+            nicer.SetGenderValue(gender);
 
             nicer.rawTorque = nicer.EstimateInsTorque(hand, wrist, elbow, shoulder, delta);
 
@@ -70,16 +44,21 @@ namespace NICER_Unity_API
                 nicer.chaffin_current = nicer.EstimateChaffinStrength(nicer.thetaShoulder, nicer.thetaElbow);
 
                 nicer.avgTorquePercent = nicer.CalculateRevisedMVC(nicer.revisedAvgTorque, nicer.chaffin_current);
-
-                nicer.fatigue_current = nicer.EstimateFatiguePrediction(nicer.avgTorquePercent, duration);
+                 
+                fatigue_indicator = nicer.EstimateFatiguePrediction(nicer.avgTorquePercent, duration);
+                nicer.fatigue_current = fatigue_indicator[1];
             }
             else if (nicer.status_current < nicer.status_last) // from active to rest
             {
-                nicer.fatigue_current = nicer.EstimateReducedFatigue(nicer.fatigue_last, delta);
+                //nicer.fatigue_current = nicer.EstimateReducedFatigue(nicer.fatigue_last, delta);
+                fatigue_indicator = nicer.EstimateReducedFatigue(nicer.fatigue_last, delta, duration);
+                nicer.fatigue_current = fatigue_indicator[1];
             }
             else if (nicer.status_current == 0 && nicer.status_last == 0) // keep resting
             {
-                nicer.fatigue_current = nicer.EstimateReducedFatigue(nicer.fatigue_last, delta);
+                //nicer.fatigue_current = nicer.EstimateReducedFatigue(nicer.fatigue_last, delta);
+                fatigue_indicator = nicer.EstimateReducedFatigue(nicer.fatigue_last, delta, duration);
+                nicer.fatigue_current = fatigue_indicator[1];
             }
             else // nicer.status_current == nicer.status_last == 1 // keep working
             {
@@ -96,7 +75,8 @@ namespace NICER_Unity_API
 
                 nicer.avgTorquePercent = nicer.CalculateRevisedMVC(nicer.revisedAvgTorque, nicer.chaffin_current);
 
-                nicer.fatigue_current = nicer.EstimateFatiguePrediction(nicer.avgTorquePercent, duration);
+                fatigue_indicator = nicer.EstimateFatiguePrediction(nicer.avgTorquePercent, duration);
+                nicer.fatigue_current = fatigue_indicator[1];
             }
 
             nicer.chaffin_last = nicer.chaffin_current;
@@ -105,7 +85,7 @@ namespace NICER_Unity_API
 
             nicer.status_last = nicer.status_current;
 
-            return nicer.fatigue_current;
+            return fatigue_indicator;
         }
     }
 
@@ -238,9 +218,18 @@ namespace NICER_Unity_API
             Dictionary<string, Vector3> tempJointPoints = new Dictionary<string, Vector3>();
 
             Vector3 hand = new Vector3(
+                rightHand.position.x,
+                rightHand.position.y,
+                rightHand.position.z);
+
+            if (rightWrist.position.x != 0 && rightWrist.position.y != 0 && rightWrist.position.z != 0)
+            {
+                hand = new Vector3(
                 (float)0.397 * (rightHand.position.x - rightWrist.position.x) + rightWrist.position.x,
                 (float)0.397 * (rightHand.position.y - rightWrist.position.y) + rightWrist.position.y,
                 (float)0.397 * (rightHand.position.z - rightWrist.position.z) + rightWrist.position.z);
+            }
+            
 
             Vector3 elbow = new Vector3(
                 rightElbow.position.x,
@@ -433,19 +422,43 @@ namespace NICER_Unity_API
             return (avgTorque / chaffinTorque) * 100;
         }
 
-        public double EstimateFatiguePrediction(double currentMVC, double totalTime)
+        public double[] EstimateFatiguePrediction(double currentMVC, double totalTime)
+        {
+            double[] currentIndicator = new double[2];
+            double currentET = (14.86 / Math.Pow(currentMVC, 1.83)) / 0.000218;
+            double currentFatigue = totalTime / currentET * 100;
+
+            currentIndicator[0] = currentET;
+            currentIndicator[1] = currentFatigue;
+
+            return currentIndicator;
+        }
+
+        /*public double EstimateFatiguePrediction(double currentMVC, double totalTime)
         {
             return totalTime / ((14.86 / Math.Pow(currentMVC, 1.83)) / 0.000218) * 100;
-        }
+        }*/
 
         public double CalculateReducedTorque(double lastChaffin, double lastNicer, float delta, double totalTime)
         {
             return (Math.Pow((totalTime - delta) * 0.000218 / (lastNicer / 100 * 14.86), (-1.0 / 1.83))) / 100 * lastChaffin;
         }
 
-        public double EstimateReducedFatigue(double prediction_last, float delta)
+        public double[] EstimateReducedFatigue(double prediction_last, float delta, double totalTime)
+        {
+            double[] currentIndicator = new double[2];
+            double currentFatigue = prediction_last * Math.Exp(-0.04 * delta);
+            double currentET = totalTime / (currentFatigue / 100);
+
+            currentIndicator[0] = currentET;
+            currentIndicator[1] = currentFatigue;
+
+            return currentIndicator;
+        }
+
+        /*public double EstimateReducedFatigue(double prediction_last, float delta)
         {
             return prediction_last * Math.Exp(-0.04 * delta);
-        }
+        }*/
     }
 }
