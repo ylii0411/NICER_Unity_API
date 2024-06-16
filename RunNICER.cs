@@ -12,9 +12,18 @@ public class RunNICER : MonoBehaviour
 
     private int currentFrame = 1;
 
+    public Transform sh;
+    public Transform el;
+    public Transform wt;
+    public Transform hd;
+
     public NICER_API nicerAPI;
 
     public double fatigueLevel;
+
+    private float delta;
+    private float totalTime;
+    private string gender = "Male";
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +34,7 @@ public class RunNICER : MonoBehaviour
 
         var data2 = csvList[2].Split(',');
 
-        nicerAPI.setDelta(float.Parse(data2[1]) - float.Parse(data1[1]));
+        delta = float.Parse(data2[1]) - float.Parse(data1[1]);
        
     }
 
@@ -39,21 +48,18 @@ public class RunNICER : MonoBehaviour
             string currentRow = csvList[currentFrame];
 
             var data_values = currentRow.Split(',');
+           
+            sh.position = new Vector3(float.Parse(data_values[2]), float.Parse(data_values[3]), float.Parse(data_values[4]));
 
-            Vector3 shoulder = new Vector3(float.Parse(data_values[2]), float.Parse(data_values[3]), float.Parse(data_values[4]));
+            el.position = new Vector3(float.Parse(data_values[5]), float.Parse(data_values[6]), float.Parse(data_values[7]));
 
-            Vector3 elbow = new Vector3(float.Parse(data_values[5]), float.Parse(data_values[6]), float.Parse(data_values[7]));
+            wt.position = new Vector3(float.Parse(data_values[8]), float.Parse(data_values[9]), float.Parse(data_values[10]));
 
-            Vector3 wrist = new Vector3(float.Parse(data_values[8]), float.Parse(data_values[9]), float.Parse(data_values[10]));
+            hd.position = new Vector3(float.Parse(data_values[11]), float.Parse(data_values[12]), float.Parse(data_values[13]));
 
-            Vector3 hand = new Vector3(float.Parse(data_values[11]), float.Parse(data_values[12]), float.Parse(data_values[13]));
+            totalTime = float.Parse(data_values[1]);
 
-
-            nicerAPI.setPosition(hand, wrist, elbow, shoulder);
-
-            nicerAPI.setTime(float.Parse(data_values[1]));
-
-            fatigueLevel = nicerAPI.generatePrediction();
+            fatigueLevel = nicerAPI.generatePrediction(hd, wt, el, sh, gender, delta, totalTime)[1]; // NICER API will return [Endurance Time (second), Fatigue Level (%)]
         }
 
         currentFrame += 1;
