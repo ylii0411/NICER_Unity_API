@@ -21,7 +21,7 @@ NICER is a New and Improved Consumed Endurance and Recovery metric to quantify m
 5. Run the scene.
 
 ## Tracking Source of Arm Posture
-* Inverse Kinematic approach: [Meta Movement SDK (RightShoulderUpper, RightShoulderLower, RightHandWrist,RightIndexFingerMeta)](https://developer.oculus.com/documentation/unity/move-body-tracking/) 
+* Inverse Kinematic approach: [Meta Movement SDK (RightArmUpper, RightArmLower, RightHandWrist,RightHandThumbMeta)](https://developer.oculus.com/documentation/unity/move-body-tracking/) 
 * Computer Vision approach:  [VNect](https://dl.acm.org/doi/abs/10.1145/3072959.3073596?casa_token=XTtT2sIzTUUAAAAA:7tISEOf7lO3jIVOHM54kAtmcksxW7IenhQblQ2Ewnf3LdRqKKqRHQcSrRJ95ToYGaE_PrawhWUB_8w)
 * Motion Capturing sensors: [Kinect V2 camera](https://learn.microsoft.com/en-us/windows/apps/design/devices/kinect-for-windows), [Vicon Nexus](https://www.vicon.com/software/nexus/), [Inertial Measurement Units (IMU)](https://www.movella.com/products/wearables/xsens-mtw-awinda)
 
